@@ -14,11 +14,13 @@ public class SignOutMenu implements Menu {
 	@Override
 	public void start() {
 		// <write your code here>
+		context.setLoggedInUser(null);
 	}
 
 	@Override
 	public void printMenuHeader() {
 		// <write your code here>	
+		System.out.println("***** SIGN OUT *****");
 	}
 
 }
