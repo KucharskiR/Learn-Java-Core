@@ -1,6 +1,62 @@
 package com.itbulls.learnit.javacore.jcf.collections.list.hw;
 
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
 public class DefaultMyList implements MyList {
+
+	/**
+	 * An iterator over a collection.
+	 * 
+	 */
+
+	private class IteratorImpl<T> implements Iterator<T> {
+
+		int cursor;
+		int lastRet = -1; // index of last element returned; -1 if no such
+
+		public boolean hasNext() {
+			// returns true if the iteration has more elements
+
+			// …
+			return cursor != size;
+		}
+
+		@SuppressWarnings("unchecked")
+		public T next() {
+			// returns the next element in the iteration
+
+			// …
+			int i = cursor;
+			if (i >= size)
+				throw new NoSuchElementException();
+			Object[] elementData = DefaultMyList.this.toArray();
+			if (i >= elementData.length)
+				throw new ConcurrentModificationException();
+			cursor = i + 1;
+			return (T) elementData[lastRet = i];
+
+		}
+
+		public void remove() {
+			// removes from the underlying collection the last element returned by this
+			// iterator
+
+			// …
+			if (lastRet < 0)
+				throw new IllegalStateException();
+
+			try {
+				DefaultMyList.this.remove(getNodeByIndex(lastRet));
+				cursor = lastRet;
+				lastRet = -1;
+			} catch (IndexOutOfBoundsException e) {
+				throw new ConcurrentModificationException();
+			}
+
+		}
+	}
 
 	transient int size = 0;
 
@@ -12,6 +68,15 @@ public class DefaultMyList implements MyList {
 
 	public DefaultMyList() {
 		super();
+	}
+
+	/*
+	 * Iterator method
+	 */
+	public Iterator<Object> iterator() {
+
+		return new IteratorImpl<Object>();
+
 	}
 
 	public void linkLast(Object e) {
@@ -43,22 +108,44 @@ public class DefaultMyList implements MyList {
 	}
 
 	public boolean remove(Object o) {
-		if (o == null) {
-			for (Node<Object> x = first; x != null; x = x.next) {
-				if (x.item == null) {
-					unlink(x);
-					return true;
-				}
-			}
-		} else {
+		try {
 			for (Node<Object> x = first; x != null; x = x.next) {
 				if (o.equals(x.item)) {
 					unlink(x);
 					return true;
 				}
 			}
+		} catch (NullPointerException e) {
+			System.out.println("Object is null");
+			for (Node<Object> x = first; x != null; x = x.next) {
+				if (x.item == null) {
+					unlink(x);
+					return true;
+				}
+			}
 		}
 		return false;
+	}
+
+	public Object getNodeByIndex(int index) {
+		int i = 0;
+		try {
+			for (Node<Object> x = first; x != null; x = x.next) {
+				if (i == index) {
+					return (Object) x.item;
+				}
+				i++;
+			}
+		} catch (NullPointerException e) {
+			System.out.println("NullPointerException");
+			for (Node<Object> x = first; x != null; x = x.next) {
+				i++;
+				if (i == index) {
+					return x.item;
+				}
+			}
+		}
+		return null;
 	}
 
 	public Object[] toArray() {
@@ -101,15 +188,26 @@ public class DefaultMyList implements MyList {
 	}
 
 	public boolean contains(Object o) {
-		return indexOf(o) >= 0;
+		try {
+			return indexOf(o) >= 0;
+		} catch (NullPointerException e) {
+			System.out.println("Object is null");
+			return false;
+		}
 	}
 
 	public boolean containsAll(MyList c) {
 		Object[] myListArray = c.toArray();
-		for (Object object : myListArray) {
-			if (contains(object) != true)
-				return false;
+		try {
+			for (Object object : myListArray) {
+				if (contains(object) != true)
+					return false;
+			}
+		} catch (NullPointerException e) {
+			System.out.println("Object is null");
+			return false;
 		}
+
 		return true;
 	}
 

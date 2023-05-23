@@ -6,18 +6,19 @@ import com.itbulls.learnit.javacore.jcf.hw.onlinestore.withlist.helpdesk.entetie
 
 public class CustomSupportTicketsComparator implements Comparator<SupportTicket> {
 
-	@Override
-	public int compare(SupportTicket ticket1, SupportTicket ticket2) {
-		if (ticket1 == null || ticket2 == null || ticket1.getPriority() == null ||  
-				ticket2.getPriority() == null) {
-			return 0;
+		@Override
+		public int compare(SupportTicket t1, SupportTicket t2) {
+			if (t1 == null || t2 == null || t1.getPriority() == null ||  
+					t1.getPriority() == null) {
+				return 0;
+			}
+			
+			int a = t2.getPriority().compareTo(t1.getPriority());
+			int b = t1.getSequentialNumber()-t2.getSequentialNumber();
+			return (a == 0) ? b : a;
 		}
-		
-		int result = ticket2.getPriority().compareTo(ticket1.getPriority());
-		if (result == 0) {
-			result = ticket1.getSequentialNumber() - ticket2.getSequentialNumber();
-		}
-		return result;
-	}
 
-}
+	}
+//     <write your code here>
+
+

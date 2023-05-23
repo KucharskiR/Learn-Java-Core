@@ -5,40 +5,42 @@ import com.itbulls.learnit.javacore.jcf.hw.onlinestore.withlist.helpdesk.entetie
 import com.itbulls.learnit.javacore.jcf.hw.onlinestore.withlist.helpdesk.enteties.SupportTicket;
 
 public class DefaultSupportTicket implements SupportTicket {
-	
-	private static int counter;
-	
-	private RequestType requestType;
-	private int sequentialNumber;
-	
+
+	static int id;
+	int sequentionalNumber;
+
+	RequestType type;
+
 	{
-		sequentialNumber = ++counter;
+		sequentionalNumber = ++id;
 	}
-	
+
 	public DefaultSupportTicket() {
-		// Default empty constructor
 	}
-	
-	public DefaultSupportTicket(RequestType requestType) {
-		this.requestType = requestType;
+
+	public DefaultSupportTicket(RequestType type) {
+		super();
+		this.type = type;
 	}
 
 	@Override
 	public Priority getPriority() {
-		if (requestType == null) {
+		if (type == null) {
 			return null;
 		}
-		return this.requestType.getPriority();
+		return this.type.getPriority();
 	}
 
 	@Override
 	public int getSequentialNumber() {
-		return this.sequentialNumber;
+		return this.sequentionalNumber;
 	}
 
 	@Override
 	public RequestType getRequestType() {
-		return this.requestType;
+		return this.type;
 	}
+
+//    <write your code here>
 
 }

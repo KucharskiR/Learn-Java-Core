@@ -9,25 +9,28 @@ import com.itbulls.learnit.javacore.jcf.hw.onlinestore.withlist.helpdesk.utils.C
 
 public class DefaultHelpDeskFacade implements HelpDeskFacade {
 	
-	private Queue<SupportTicket> tickets;
+	Queue<SupportTicket> queue;
 	
 	{
-		tickets = new PriorityQueue<>(new CustomSupportTicketsComparator());
+		queue = new PriorityQueue<>(new CustomSupportTicketsComparator());
 	}
 
 	@Override
 	public void addNewSupportTicket(SupportTicket supportTicket) {
-		tickets.offer(supportTicket);
+		queue.offer(supportTicket);
 	}
 
 	@Override
 	public SupportTicket getNextSupportTicket() {
-		return tickets.poll();
+		return queue.poll();
 	}
 
 	@Override
 	public int getNumberOfTickets() {
-		return tickets.size();
+		return queue.size();
 	}
+	
+//    <write your code here>
 
 }
+
